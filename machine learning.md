@@ -51,11 +51,58 @@ Simple linear regression (SLR) is a fundamental supervised learning statistical 
 The model never predicts ε.
 
 * There are 2 ways to find the value of m and b.
-  * Closed form solution
-  * Non closed form solution
+  * **Closed form solution** :  (Direct mathematical formula using ordinary least square. Scikit learn is using this technique for linear regression algo).
+  * Its only efficient for lower dimensional data.
+<img src="image-4.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
+<img src="image-5.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
+<img src="image-6.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
+<img src="image-7.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
+<img src="image-8.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
 
+
+
+  
+  * **Non closed form solution** (Gradient Descent). Used for higher dimensional data. SGD Regressor in python uses this.
+  
+  #### Regression evaluation metrics
+  * MAE (L1 Regression) : $\frac{1}{n}\sum_{i=1}^{n}\left|y_i-\hat{y}_i\right|$
+
+  Advantages: It is differentiable
+  Disadvantages: Not robust to outliers.
+
+
+  * MSE : $\frac{1}{n}\sum_{i=1}^{n}\left(y_i-\hat{y}_i\right)^2$
+
+  Advantages: Robuts to outliers.
+  Disadvantages:
+    It is not differentiable at 0.
+
+   
+  * RMSE : $\sqrt{\frac{1}{n}\sum_{i=1}^{n}\left(y_i-\hat{y}_i\right)^2}$
+
+  * R2 Score : $1-\frac{\sum_{i=1}^{n}\left(y_i-\hat{y}_i\right)^2}{\sum_{i=1}^{n}\left(y_i-\bar{y}\right)^2}$
+
+  R² compares your model against a dumb model that always predicts mean(y).
+
+  
+ <img src="image-11.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
+
+ ![alt text](image-12.png)
+
+Problem: R² never decreases when you add more features (predictors), even if those features are useless.
+
+  * Adjusted R2 score : It rewards you for adding useful features and punishes you for adding useless ones.
+  ![alt text](image-13.png)
+
+Shape of the cost function creates a bowl shaped curve having a single global minimum.
+
+### Multi Linear Regression
 
 **New Topics :**
   * Out of core learning : Out-of-core learning is a machine learning approach designed to handle datasets that are too large to fit into a computer’s main memory (RAM). Instead of loading the entire dataset at once, the algorithm processes the data in small chunks. E.g Mini batch processing, Stochastic gradient descent.
+
+<img src="image-10.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
+
+![alt text](image-9.png)
 
   
