@@ -50,6 +50,10 @@ Simple linear regression (SLR) is a fundamental supervised learning statistical 
 
 The model never predicts ε.
 
+* There are 2 ways to find the value of m and b.
+  * Closed form solution
+  * Non closed form solution
+
 
 **New Topics :**
   * Out of core learning : Out-of-core learning is a machine learning approach designed to handle datasets that are too large to fit into a computer’s main memory (RAM). Instead of loading the entire dataset at once, the algorithm processes the data in small chunks. E.g Mini batch processing, Stochastic gradient descent.
