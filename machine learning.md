@@ -64,7 +64,10 @@ The model never predicts ε.
 
 * There are 2 ways to find the value of m and b.
   * **Closed form solution** :  (Direct mathematical formula using ordinary least square. Scikit learn is using this technique for linear regression algo).
-  * Its only efficient for lower dimensional data.
+  * Its only efficient for lower dimensional data. If a function is convex that means if the line between any two points on the function lies above the function having one one global minima or maxima then we can use closed form solution.
+
+![alt text](image-41.png)
+
 <img src="image-4.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
 
 <img src="image-5.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
@@ -129,7 +132,6 @@ In Multiple Linear Regression (MLR), the key idea behind **Ordinary Least Square
 
 > Choose coefficients \(\beta\) such that the **Sum of Squared Errors (SSE)** is minimized.
 
-
 ---
 
 ## 1) Core objects in Multiple Linear Regression
@@ -143,6 +145,7 @@ $$
 Where:
 
 ### 1.1 Output vector \(y\) (n×1)
+
 \(y\) contains all actual target values:
 
 $$
@@ -155,14 +158,16 @@ y_n
 \end{bmatrix}
 $$
 
-- \(n\) = number of training examples
+* \(n\) = number of training examples
 
 ---
+
 ### 1.2 Feature matrix \(X\) (n×p)
+
 \(X\) stores all feature values.
 
-- \(n\) = number of samples (rows)
-- \(p\) = number of parameters (columns)  
+* \(n\) = number of samples (rows)
+* \(p\) = number of parameters (columns)  
   (including intercept column of ones)
 
 Example: intercept + two features \((x_1, x_2)\)
@@ -190,8 +195,8 @@ $$
 \end{bmatrix}
 $$
 
-- \(\beta_0\) = intercept
-- \(\beta_1,\beta_2,\dots\) = weights of features
+* \(\beta_0\) = intercept
+* \(\beta_1,\beta_2,\dots\) = weights of features
 
 ---
 
@@ -294,11 +299,12 @@ $$
 ## 3) Interpretation: What is SSE?
 
 ### ✅ SSE / RSS Meaning
+
 \(e^T e\) is known as:
 
-- SSE = Sum of Squared Errors
-- RSS = Residual Sum of Squares
-- Sum of Squared Residuals
+* SSE = Sum of Squared Errors
+* RSS = Residual Sum of Squares
+* Sum of Squared Residuals
 
 It measures the **total squared prediction error** of the model on the dataset.
 
@@ -323,8 +329,8 @@ $$
 
 Problems occur:
 
-- positive and negative errors cancel out
-- model may look “perfect” even when it isn’t
+* positive and negative errors cancel out
+* model may look “perfect” even when it isn’t
 
 Example: errors \(+10\) and \(-10\)
 
@@ -340,16 +346,15 @@ $$
 
 Benefits of squaring:
 
-- makes all errors positive
-- penalizes large errors heavily
-- gives a smooth differentiable objective (easy optimization)
+* makes all errors positive
+* penalizes large errors heavily
+* gives a smooth differentiable objective (easy optimization)
 
 ---
 
 ## 5) The OLS objective in matrix form
 
 Since:
-
 
 $$
 e=y-X\beta
@@ -359,7 +364,7 @@ $$
 ![alt text](image-22.png)
 ![alt text](image-33.png)
 
-_____------------------------------------_____
+_****------------------------------------****_
 
 ![alt text](image-34.png)
 
@@ -419,8 +424,8 @@ This is the **closed-form OLS solution** (works if \(X^TX\) is invertible).
 
 ## 8) Geometric intuition (very important)
 
-- \(y\) is a vector in \(n\)-dimensional space
-- \(\hat{y}\) lies in the column space (span) of \(X\)
+* \(y\) is a vector in \(n\)-dimensional space
+* \(\hat{y}\) lies in the column space (span) of \(X\)
 
 OLS chooses \(\hat{y}\) to be the **projection of \(y\)** onto the space spanned by columns of \(X\).
 
@@ -453,11 +458,8 @@ So the normal equation is actually a **perpendicularity condition**:
 
 ---
 
-
-
-
-
 **Feature Scaling (Important for feature engineering):**
+
 * Feature scaling are mainly of 2 types which are as folloews:
   * **Normalization**
     * Normalization is a data preprocessing technique that rescales numerical features to a common range, most commonly between 0 and 1, so that all features are on the same scale and differences in measurement units are eliminated.
@@ -487,18 +489,42 @@ So the normal equation is actually a **perpendicularity condition**:
 ![alt text](image-26.png)
 * The main reason to do feature scaling is that some machine learning algorithms use distance between data points to make predictions. If one feature has a wide range of values, it can dominate the distance calculations and lead to biased results. By scaling features to a similar range, we ensure that all features contribute equally to the distance calculations.
 
-
 ![alt text](image-24.png)
 
 ![alt text](image-25.png)
 
 **Feature Encoding (Important for feature engineering):**
-* 
+
+
+
+
+
+
+
+## Loss Functions
+![alt text](image-39.png)
+![alt text](image-40.png)
+
+## Gradient Descent
+Problems faced in Gradient Descent:
+![alt text](image-42.png)
+
 
 **New Topics :**
 
 * Out of core learning : Out-of-core learning is a machine learning approach designed to handle datasets that are too large to fit into a computer’s main memory (RAM). Instead of loading the entire dataset at once, the algorithm processes the data in small chunks. E.g Mini batch processing, Stochastic gradient descent.
+  
+## There are mainly 2 types of ML Models
+
+**Parametric Models :** In parametric models, the model structure is defined by a fixed number of parameters. Once these parameters are learned from the training data, the model can make predictions without needing to refer back to the entire dataset. Examples of parametric models include linear regression, logistic regression, and neural networks.
+
+* Parametric models make strong assumptions about the data, such as assuming a specific functional form (e.g., linearity) or data distribution (e.g., Gaussian,linear). This can lead to underfitting if the assumptions do not hold true for the data.
+* Fixed number of parameters regardless of the size of the training data. This can lead to faster training and prediction times, especially for large datasets.
+  
+**Non-Parametric Models :** Non-parametric models do not assume a fixed number of parameters. Instead, they can adapt their complexity based on the amount of training data available. These models often require storing the entire dataset or a significant portion of it to make predictions. Examples of non-parametric models include k-nearest neighbors (KNN), decision trees, and kernel density estimation.
 
 <img src="image-10.png" alt="alt text" style="border: 1px solid red; margin-right: 10px;">
 
 ![alt text](image-9.png)
+![alt text](image-38.png)
+
