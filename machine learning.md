@@ -243,10 +243,6 @@ $$
 
 ---
 
-## 2) What the diagram is showing: \(e^T e\)
-
-In the diagram:
-
 ### Residual transpose vector \(e^T\) is (1×n)
 
 $$
@@ -288,7 +284,7 @@ Result is:
 $$
 e^Te=(y_1-\hat{y}_1)^2+(y_2-\hat{y}_2)^2+\cdots+(y_n-\hat{y}_n)^2
 $$
-
+![alt text](image-19.png)
 ![alt text](image-20.png)
 
 ✅ This is exactly the **Sum of Squared Errors (SSE)**.
@@ -361,20 +357,25 @@ $$
 
 ![alt text](image-21.png)
 ![alt text](image-22.png)
+![alt text](image-33.png)
 
-substitute into SSE:
+_____------------------------------------_____
 
-$$
+![alt text](image-34.png)
+
+We will differentiate the equation shown in the image to find the best value of beta which minimizes the error. The equation after performing differentiation is shown below:
+
+![alt text](image-35.png)
+
+The shape of β will be (m+1,1) because we have m features and one intercept term.
+
+![alt text](image-36.png)
+
+![alt text](image-37.png)
+
+$
 e^Te = (y-X\beta)^T(y-X\beta)
-$$
-
-This is the standard **loss function** for Multiple Linear Regression.
-
-OLS aims to minimize:
-
-$$
-\hat{\beta} = \arg\min_{\beta} (y-X\beta)^T(y-X\beta)
-$$
+$
 
 ---
 
@@ -393,13 +394,6 @@ $$
 =
 y^Ty - 2\beta^T X^T y + \beta^T X^T X \beta
 $$
-
-This shows:
-
-- it’s a **quadratic function** in \(\beta\)
-- quadratic functions have a well-defined minimum (convex if \(X^TX\) positive semidefinite)
-
----
 
 ## 7) Minimization leads to Normal Equation
 
@@ -459,14 +453,47 @@ So the normal equation is actually a **perpendicularity condition**:
 
 ---
 
-## 9) Final meaning of the diagram (one sentence)
-
-The diagram shows:
-
-> \(e^T e\) is the matrix form of the **sum of squared residuals**, and Multiple Linear Regression finds \(\beta\) such that this quantity is minimized.
 
 
-![alt text](image-19.png)
+
+
+**Feature Scaling (Important for feature engineering):**
+* Feature scaling are mainly of 2 types which are as folloews:
+  * **Normalization**
+    * Normalization is a data preprocessing technique that rescales numerical features to a common range, most commonly between 0 and 1, so that all features are on the same scale and differences in measurement units are eliminated.
+    * It is not robuts to outliers because if there is an outlier then min and max value will be affected and all other values will be compressed in small range.
+    * It is not necessary that the distribution shape will remain same after normalization.
+    * Types of normalization :
+      * **Min Max Scaling:** It scales the data to a fixed range, usually 0 to 1. It is mostly used in image processing where pixel values are between 0 to 255 because we know the maximum and minimum values and we want to scale it between 0 and 1.
+![alt text](image-27.png)
+![alt text](image-28.png)
+![alt text](image-29.png)
+      * As you can see that both these distribution first were not overlapping because of different scale but after min max scaling both are overlapping because both are in same scale now.
+
+      * **Max Abs Scaling** : It scales the data by dividing each value by the maximum absolute value of that feature. The resulting values will be in the range [-1, 1]. It is mostly used when data is sparse where significant portion of the values are zero.
+![alt text](image-31.png)
+      * **Mean Normalization :** It is a technique used to scale features by subtracting the mean and dividing by the range (max - min) of the feature. This centers the data around zero and scales it to a range of -1 to 1.
+![alt text](image-30.png)
+      * Robust Scaling : It is used when data contains outliers. It uses median and interquartile range for scaling. It subtracts median from each value and then divides it by interquartile range.
+  ![alt text](image-32.png)
+  * **Standardization**
+    * It is used when we know the distribution of data. It scales data such that mean becomes 0 and standard deviation becomes 1. It is based on z score and thats why it is also called z score normalization.
+    * Z-score normalization (also called standardization) is the process of transforming every value in a feature into its z-score.
+    * Shape of distribution does not change after standardization.
+    * Standardization (z-score normalization) involves mean centering followed by scaling by the standard deviation. This transformation results in a feature with zero mean and unit variance, effectively rescaling the data without changing its distribution shape.
+    * If we standardize the data then we can easily find outliers because outliers will have z score greater than 3 or less than -3.
+    * Algorithms like decision tree, random forest do not require feature scaling because they are not based on distance.
+![alt text](image-23.png)
+![alt text](image-26.png)
+* The main reason to do feature scaling is that some machine learning algorithms use distance between data points to make predictions. If one feature has a wide range of values, it can dominate the distance calculations and lead to biased results. By scaling features to a similar range, we ensure that all features contribute equally to the distance calculations.
+
+
+![alt text](image-24.png)
+
+![alt text](image-25.png)
+
+**Feature Encoding (Important for feature engineering):**
+* 
 
 **New Topics :**
 
