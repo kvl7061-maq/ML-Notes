@@ -106,7 +106,367 @@ Shape of the cost function creates a bowl shaped curve having a single global mi
 
 ## Multi Linear Regression
 
-* e
+* It is an extension of simple linear regression that uses multiple independent variables to predict the value of a dependent variable.
+* The model is represented as: y = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ
+* In simple linear regression, we try to find the best-fit line because the relationship involves one independent variable and one dependent variable, which can be represented in a 2-dimensional plane. In multiple linear regression, we try to find the best-fit hyperplane because the relationship involves multiple independent variables, and the data exists in a higher-dimensional space (e.g., 3D or more).
+
+![alt text](image-14.png)
+
+* Formula for predicting value of y using matrix representation:
+
+![alt text](image-15.png)
+
+* This matrix can be decomposed to 2 matrices X and β where X is feature matrix and β is coefficient matrix. Dot product of these 2 matrices will give predicted value of y.
+
+![alt text](image-16.png)
+![alt text](image-17.png)
+![alt text](image-18.png)
+
+* The shape of X will be (m,n+1) where m is number of training examples and n is number of features. And shape of β will be (n+1,1) because we have n features and each feature will have one coefficient. So the shape of predicted y will be (m,1) because we have m training examples. its n+1 because of intercept term.
+* cost function for multiple linear regression is as follows:
+
+In Multiple Linear Regression (MLR), the key idea behind **Ordinary Least Squares (OLS)** is:
+
+> Choose coefficients \(\beta\) such that the **Sum of Squared Errors (SSE)** is minimized.
+
+
+---
+
+## 1) Core objects in Multiple Linear Regression
+
+The MLR model is:
+
+$$
+y = X\beta + \varepsilon
+$$
+
+Where:
+
+### 1.1 Output vector \(y\) (n×1)
+\(y\) contains all actual target values:
+
+$$
+y=
+\begin{bmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_n
+\end{bmatrix}
+$$
+
+- \(n\) = number of training examples
+
+---
+### 1.2 Feature matrix \(X\) (n×p)
+\(X\) stores all feature values.
+
+- \(n\) = number of samples (rows)
+- \(p\) = number of parameters (columns)  
+  (including intercept column of ones)
+
+Example: intercept + two features \((x_1, x_2)\)
+
+$$
+X=
+\begin{bmatrix}
+1 & x_{11} & x_{12}\\
+1 & x_{21} & x_{22}\\
+\vdots & \vdots & \vdots\\
+1 & x_{n1} & x_{n2}
+\end{bmatrix}
+$$
+
+---
+
+### 1.3 Coefficient vector \(\beta\) (p×1)
+
+$$
+\beta=
+\begin{bmatrix}
+\beta_0\\
+\beta_1\\
+\beta_2
+\end{bmatrix}
+$$
+
+- \(\beta_0\) = intercept
+- \(\beta_1,\beta_2,\dots\) = weights of features
+
+---
+
+### 1.4 Predicted values \(\hat{y}\) (n×1)
+
+$$
+\hat{y}=X\hat{\beta}
+$$
+
+Which means:
+
+$$
+\hat{y}=
+\begin{bmatrix}
+\hat{y}_1\\
+\hat{y}_2\\
+\vdots\\
+\hat{y}_n
+\end{bmatrix}
+$$
+
+---
+
+### 1.5 Residual (error) vector \(e\) (n×1)
+
+Residuals are the difference between actual and predicted values:
+
+$$
+e = y-\hat{y}
+$$
+
+So:
+
+$$
+e=
+\begin{bmatrix}
+y_1-\hat{y}_1\\
+y_2-\hat{y}_2\\
+\vdots\\
+y_n-\hat{y}_n
+\end{bmatrix}
+$$
+
+Each residual value:
+
+$$
+e_i=y_i-\hat{y}_i
+$$
+
+---
+
+## 2) What the diagram is showing: \(e^T e\)
+
+In the diagram:
+
+### Residual transpose vector \(e^T\) is (1×n)
+
+$$
+e^T=
+\begin{bmatrix}
+y_1-\hat{y}_1 & y_2-\hat{y}_2 & \cdots & y_n-\hat{y}_n
+\end{bmatrix}
+$$
+
+### Residual vector \(e\) is (n×1)
+
+$$
+e=
+\begin{bmatrix}
+y_1-\hat{y}_1\\
+y_2-\hat{y}_2\\
+\vdots\\
+y_n-\hat{y}_n
+\end{bmatrix}
+$$
+
+Now multiply them:
+
+$$
+e^T e=
+\begin{bmatrix}
+y_1-\hat{y}_1 & y_2-\hat{y}_2 & \cdots & y_n-\hat{y}_n
+\end{bmatrix}
+\begin{bmatrix}
+y_1-\hat{y}_1\\
+y_2-\hat{y}_2\\
+\vdots\\
+y_n-\hat{y}_n
+\end{bmatrix}
+$$
+
+Result is:
+
+$$
+e^Te=(y_1-\hat{y}_1)^2+(y_2-\hat{y}_2)^2+\cdots+(y_n-\hat{y}_n)^2
+$$
+
+![alt text](image-20.png)
+
+✅ This is exactly the **Sum of Squared Errors (SSE)**.
+
+---
+
+## 3) Interpretation: What is SSE?
+
+### ✅ SSE / RSS Meaning
+\(e^T e\) is known as:
+
+- SSE = Sum of Squared Errors
+- RSS = Residual Sum of Squares
+- Sum of Squared Residuals
+
+It measures the **total squared prediction error** of the model on the dataset.
+
+If SSE is small → predictions are close to actual values.  
+If SSE is large → model predictions are far from actual values.
+
+---
+
+## 4) Why do we square the residuals?
+
+For a sample:
+
+$$
+e_i = y_i - \hat{y}_i
+$$
+
+If we just summed residuals:
+
+$$
+\sum_{i=1}^{n} e_i
+$$
+
+Problems occur:
+
+- positive and negative errors cancel out
+- model may look “perfect” even when it isn’t
+
+Example: errors \(+10\) and \(-10\)
+
+$$
++10 + (-10) = 0
+$$
+
+So we square them:
+
+$$
+\sum_{i=1}^{n} e_i^2
+$$
+
+Benefits of squaring:
+
+- makes all errors positive
+- penalizes large errors heavily
+- gives a smooth differentiable objective (easy optimization)
+
+---
+
+## 5) The OLS objective in matrix form
+
+Since:
+
+
+$$
+e=y-X\beta
+$$
+
+![alt text](image-21.png)
+![alt text](image-22.png)
+
+substitute into SSE:
+
+$$
+e^Te = (y-X\beta)^T(y-X\beta)
+$$
+
+This is the standard **loss function** for Multiple Linear Regression.
+
+OLS aims to minimize:
+
+$$
+\hat{\beta} = \arg\min_{\beta} (y-X\beta)^T(y-X\beta)
+$$
+
+---
+
+## 6) Expanding the objective
+
+Expanding:
+
+$$
+(y-X\beta)^T(y-X\beta)
+$$
+
+gives:
+
+$$
+(y-X\beta)^T(y-X\beta)
+=
+y^Ty - 2\beta^T X^T y + \beta^T X^T X \beta
+$$
+
+This shows:
+
+- it’s a **quadratic function** in \(\beta\)
+- quadratic functions have a well-defined minimum (convex if \(X^TX\) positive semidefinite)
+
+---
+
+## 7) Minimization leads to Normal Equation
+
+We minimize SSE by differentiating with respect to \(\beta\) and setting gradient to 0.
+
+Result:
+
+$$
+X^T X \beta = X^T y
+$$
+
+This is the **Normal Equation**.
+
+Solving for \(\beta\):
+
+$$
+\hat{\beta} = (X^T X)^{-1}X^T y
+$$
+
+This is the **closed-form OLS solution** (works if \(X^TX\) is invertible).
+
+---
+
+## 8) Geometric intuition (very important)
+
+- \(y\) is a vector in \(n\)-dimensional space
+- \(\hat{y}\) lies in the column space (span) of \(X\)
+
+OLS chooses \(\hat{y}\) to be the **projection of \(y\)** onto the space spanned by columns of \(X\).
+
+Residual:
+
+$$
+e = y - \hat{y}
+$$
+
+OLS ensures residual is perpendicular to the feature space:
+
+$$
+X^T e = 0
+$$
+
+Substitute \(e=y-X\beta\):
+
+$$
+X^T(y-X\beta)=0
+$$
+
+Which becomes:
+
+$$
+X^T X\beta = X^T y
+$$
+
+So the normal equation is actually a **perpendicularity condition**:
+> error must be orthogonal to the space of predictors.
+
+---
+
+## 9) Final meaning of the diagram (one sentence)
+
+The diagram shows:
+
+> \(e^T e\) is the matrix form of the **sum of squared residuals**, and Multiple Linear Regression finds \(\beta\) such that this quantity is minimized.
+
+
+![alt text](image-19.png)
 
 **New Topics :**
 
