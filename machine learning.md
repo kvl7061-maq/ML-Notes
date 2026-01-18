@@ -495,20 +495,44 @@ So the normal equation is actually a **perpendicularity condition**:
 
 **Feature Encoding (Important for feature engineering):**
 
-
-
-
-
-
-
 ## Loss Functions
+
 ![alt text](image-39.png)
 ![alt text](image-40.png)
 
 ## Gradient Descent
+
 Problems faced in Gradient Descent:
 ![alt text](image-42.png)
+![alt text](image-43.png)
 
+Gradient descent baiscally helps us to find the minima of a function. It is an optimization algorithm used to minimize a function by iteratively moving towards the steepest descent, which is the direction of the negative gradient.
+
+Step 1 : Initialize the parameters (weights) randomly or with some initial values.
+
+Step 2 : Calculate the predicted output using current parameters.
+
+Step 3 : Compute the loss (error) between predicted output and actual output using a loss function.
+
+Step 4: Calculate the gradient of the loss function with respect to each parameter. The gradient represents the direction and rate of change of the loss function. It is computed using derivatives. If the gradient of a parameter is positive, increasing that parameter increases the loss, so the parameter value is decreased. If the gradient is negative, increasing the parameter decreases the loss, so the parameter value is increased. In this way, the parameters are adjusted in the direction opposite to the gradient to move toward the minimum of the loss function.
+
+Step 5: Update the parameters using the calculated gradients and a learning rate, which determines the step size for each update. The learning rate is a hyperparameter that needs to be chosen carefully; too large a learning rate can cause overshooting of the minimum, while too small a learning rate can lead to slow convergence. So updated parameter = current parameter - learning rate * gradient(slope).
+
+Step 6: Repeat steps 2 to 5 until convergence, which occurs when the change in loss is below a certain threshold or after a fixed number of iterations.
+
+--------------------------------------------------------
+
+For L(m,b) first we will calculate partial derivative with respect to m and b.
+
+![alt text](image-44.png)
+
+![alt text](image-45.png)
+
+![alt text](image-46.png)
+
+Types of Gradient Descent:
+
+* **Batch Gradient Descent** : It uses the entire dataset to compute the gradient of the loss function for each iteration. It provides a stable and accurate estimate of the gradient but can be computationally expensive for large datasets.
 
 **New Topics :**
 
@@ -527,4 +551,3 @@ Problems faced in Gradient Descent:
 
 ![alt text](image-9.png)
 ![alt text](image-38.png)
-
