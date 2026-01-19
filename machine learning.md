@@ -81,14 +81,13 @@ The model never predicts ε.
 
 * MAE (L1 Regression) : $\frac{1}{n}\sum_{i=1}^{n}\left|y_i-\hat{y}_i\right|$
 
-  Advantages: It is differentiable
-  Disadvantages: Not robust to outliers.
+  Advantages: Robuts to outliers.
+  Disadvantages: It is not differentiable at 0.
 
 * MSE : $\frac{1}{n}\sum_{i=1}^{n}\left(y_i-\hat{y}_i\right)^2$
 
-  Advantages: Robuts to outliers.
-  Disadvantages:
-    It is not differentiable at 0.
+  Advantages: It is differentiable
+  Disadvantages: Not robust to outliers.
 
 * RMSE : $\sqrt{\frac{1}{n}\sum_{i=1}^{n}\left(y_i-\hat{y}_i\right)^2}$
 
@@ -195,8 +194,8 @@ $$
 \end{bmatrix}
 $$
 
-* \(\beta_0\) = intercept
-* \(\beta_1,\beta_2,\dots\) = weights of features
+* $$\beta_0\ = intercept $$
+* $$\beta_1,\beta_2,\dots\ = weights of features $$
 
 ---
 
@@ -532,7 +531,58 @@ For L(m,b) first we will calculate partial derivative with respect to m and b.
 
 Types of Gradient Descent:
 
-* **Batch Gradient Descent** : It uses the entire dataset to compute the gradient of the loss function for each iteration. It provides a stable and accurate estimate of the gradient but can be computationally expensive for large datasets.
+* **Batch Gradient Descent** : It uses the entire dataset to compute the gradient of the loss function for each iteration. It provides a stable and accurate estimate of the gradient but can be computationally expensive for large datasets. It is mainly used when the dataset is small enough to fit into memory and also converges smoothly towards the minimum of the loss function. Convex functions are best suited for batch gradient descent because BGD can get stuck in local minima or saddle points in non convex function.
+* **Stochastic Gradient Descent :** It updates the parameters using the gradient computed from a single randomly selected data point. This makes it much faster and allows it to start improving the model right away. However, the updates can be noisy and may lead to a less stable convergence. Its name is stochastic because of the randomness involved in selecting data points for each update.
+* The final solution may oscillate around the minimum rather than converging smoothly because of randomness in selecting data points for each update.
+* In stochastic it is possible that **step n+1 is worse than step n because of randomness.** while in batch it is not possible because it uses entire data.
+* In SGD we can face a problem wherein even near the solution the updates can be large and erratic because of high variance in gradient estimates from single data points. To mitigate this, techniques like learning rate scheduling (gradually decreasing the learning rate over time) and data shuffling (randomizing the order of data points before each epoch) are commonly used.
+
+* Advantages of stochastic gradient descent include faster convergence, ability to escape local minima, and suitability for large datasets. It is mainly used when the dataset is too large to fit into memory or when we want to quickly iterate over the data. Non-convex functions are best suited for stochastic gradient descent.
+* Gradient estimates in stochastic gradient descent are noisy, leading to oscillations around the minimum; requires careful learning rate scheduling and data shuffling.
+* SGD’s noise can actually help escape saddle points and poor local minima. Deep learning is non-convex + large-scale and that's why SGD practical and effectively always used to train deep learning models.
+
+* **Why SGD uses random rows (not sequential)**
+
+* SGD updates model parameters using one random data row (or sequential rows after shuffling) because:
+
+* Prevents ordering bias: real datasets are often sorted/grouped (by class, time, category). Sequential updates can make SGD learn in a biased direction.
+
+* Reduces correlated gradients: consecutive rows are similar → gradients become similar → slow/unstable learning. Randomization breaks this correlation.
+
+* Unbiased gradient estimate: random sampling ensures the expected SGD gradient points toward the true/full gradient direction.
+
+* **Mini-Batch Gradient Descent :** It is a compromise between batch and stochastic gradient descent. It divides the dataset into small batches and computes the gradient for each batch. This approach balances the computational efficiency of stochastic gradient descent with the stability of batch gradient descent.
+
+![alt text](image-56.png)
+
+## Gradient Descent for n dimensional data
+
+![alt text](image-47.png)
+![alt text](image-48.png)
+
+Partial derivative with respect to ${\beta_0}$
+
+![alt text](image-49.png)
+
+Now generalising the method for n dimension
+
+![alt text](image-50.png)
+
+Partial derivative with respect to ${\beta_1}$
+
+![alt text](image-51.png)
+
+Now generalising the method for n dimension
+![alt text](image-53.png)
+![alt text](image-52.png)
+
+Partial derivative with respect to ${\beta_2}$
+
+![alt text](image-54.png)
+
+Generalised partial derivateve for ${\beta_1}$ ... ${\beta_n}$
+
+![alt text](image-55.png)
 
 **New Topics :**
 
