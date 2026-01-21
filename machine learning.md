@@ -749,6 +749,26 @@ Impurity Measures:
 
 For numerical features, we need to find the best threshold to split the data. We can do this by sorting the unique values of the feature and then calculating the impurity for each possible split point (midpoint between two consecutive unique values). The split point that results in the lowest impurity is selected as the best threshold.
 
+Feature importance using ginni:
+
+steps:
+1. Calculate the Gini impurity of the parent node (before the split).
+2. For each feature, iterate through all possible split points:
+   a. Split the data into left and right subsets based on the split point.
+   b. Calculate the Gini impurity for the left and right subsets.
+   c. Calculate the weighted Gini impurity of the split using the formula: Weighted Gini = (n_left / n_total) * Gini_left + (n_right / n_total) * Gini_right where n_left and n_right are the number of instances in the left and right subsets, respectively, and n_total is the total number of instances.
+   d. Calculate the Gini gain for the split using the formula: Gini Gain = Gini_parent - Weighted Gini
+3. Select the split point that results in the highest Gini gain as the best threshold for that feature.
+4. Repeat steps 2-3 for all features and select the feature with the highest Gini gain as the best feature to split the data at the current node.
+5. The Gini gain for the selected feature can be used as a measure of feature importance. Features with higher Gini gain are considered more important for making predictions.
+6. Repeat the process recursively for each child node until a stopping criterion is met (e.g., maximum depth, minimum samples per leaf, or pure leaf nodes).
+7. The final decision tree can be used for making predictions on new data by traversing the tree based on the feature values of the input instance.
+8. The feature importance can be calculated by summing the Gini gains for each feature across all nodes in the tree where that feature is used for splitting. The importance scores can then be normalized to obtain relative importance values.
+9. The resulting feature importance scores can be used to identify the most relevant features for the prediction task and can also be used for feature selection or dimensionality reduction.
+
+![alt text](image-78.png)
+![alt text](image-79.png)
+
 **CART FOR REGRESSION:**
 In regression tasks, CART uses mean squared error (MSE) as the splitting criterion. The goal is to minimize the MSE in the resulting subsets after the split. The MSE is calculated as the average of the squared differences between the actual values and the predicted values (mean of the subset).
 
@@ -786,6 +806,12 @@ Splitting Criteria:
 One of the major problems with decision trees is overfitting. Overfitting occurs when the model learns the training data too well, including noise and outliers, resulting in poor generalization to new data. To prevent overfitting, we can use techniques such as:
 
 * Pruning : It involves removing branches from the decision tree that do not provide significant predictive power. This can be done by setting a maximum depth for the tree, minimum samples required to split a node, or minimum samples required at a leaf node.
+  * There are two types of pruning:
+    * Pre-pruning : It involves stopping the growth of the tree before it reaches its maximum depth. This can be done by setting a maximum depth for the tree, minimum samples required to split a node, or minimum samples required at a leaf node.
+    * Post-pruning : It involves growing the full tree and then removing branches that do not provide significant predictive power. This can be done by evaluating the performance of the tree on a validation set and removing branches that do not improve the performance.
+
+![alt text](image-80.png)
+  
 * Setting minimum samples per leaf : It ensures that each leaf node has a minimum number of samples, preventing the tree from creating overly specific rules that may not generalize well.
 * Setting maximum depth : It limits the depth of the tree, preventing it from growing too deep and capturing noise in the data.
 * Setting minimum samples per split : It ensures that a node must have a minimum number of samples before it can be split, preventing the tree from creating splits based on very few samples.
@@ -796,22 +822,179 @@ One of the major problems with decision trees is overfitting. Overfitting occurs
 
 Ensemble methods combine multiple decision trees to improve the accuracy and robustness of predictions. Some popular ensemble methods include:
 
-* Random Forest : It is an ensemble learning method that combines multiple decision trees to improve the accuracy and robustness of predictions. Each tree is trained on a random subset of the data and a random subset of features. The final prediction is made by aggregating the predictions of all the trees (majority voting for classification and averaging for regression).
-* Gradient Boosting Machines (GBM) : It is another ensemble learning method that builds decision trees sequentially, where each tree tries to correct the errors of the previous tree. The final prediction is made by combining the predictions of all the trees, weighted by their performance.
-* Extreme Gradient Boosting (XGBoost) : It is an optimized implementation of gradient boosting that is designed to be highly efficient and scalable. It includes several advanced features, such as regularization, parallel processing, and handling missing values, which make it a popular choice for machine learning competitions and real-world applications.
-* LightGBM : It is a gradient boosting framework that uses tree-based learning algorithms. It is designed to be efficient and scalable, with a focus on speed and memory usage. LightGBM uses a histogram-based approach to split the data, which allows it to handle large datasets with high dimensionality.
-* CatBoost : It is a gradient boosting library that is designed to handle categorical features automatically. It uses a combination of decision trees and gradient boosting to make predictions, and includes several advanced features, such as handling missing values and reducing overfitting.
-* AdaBoost : It is an ensemble learning method that combines multiple weak classifiers to create a strong classifier. It works by iteratively training weak classifiers on the data, where each classifier focuses on the misclassified instances from the previous classifier. The final prediction is made by combining the predictions of all the classifiers, weighted by their performance.
-* Stacking : It is an ensemble learning method that combines multiple base models to create a meta-model. The base models are trained on the data, and their predictions are used as input features for the meta-model. The meta-model is then trained to make the final prediction based on the predictions of the base models.
-* Voting Classifier : It is an ensemble learning method that combines multiple classifiers to make a final prediction. Each classifier makes a prediction, and the final prediction is made by majority voting (for classification) or averaging (for regression).
-* Bagging (Bootstrap Aggregating) : It is an ensemble learning method that combines multiple models trained on different subsets of the data. Each model is trained on a random subset of the data (with replacement), and the final prediction is made by aggregating the predictions of all the models (majority voting for classification and averaging for regression).
-* Extra Trees (Extremely Randomized Trees) : It is an ensemble learning method that combines multiple decision trees to improve the accuracy and robustness of predictions. Each tree is trained on the entire dataset, but the splits are made randomly, rather than based on the best split. The final prediction is made by aggregating the predictions of all the trees (majority voting for classification and averaging for regression).
-*
+![alt text](image-81.png)
+![alt text](image-82.png)
 
+* Random Forest : It is an ensemble learning method that combines multiple decision trees to improve the accuracy and robustness of predictions. Each tree is trained on a random subset of the data and a random subset of features. The final prediction is made by aggregating the predictions of all the trees (majority voting for classification and averaging for regression).
+
+* Gradient Boosting Machines (GBM) : It is another ensemble learning method that builds decision trees sequentially, where each tree tries to correct the errors of the previous tree. The final prediction is made by combining the predictions of all the trees, weighted by their performance.
+
+* Extreme Gradient Boosting (XGBoost) : It is an optimized implementation of gradient boosting that is designed to be highly efficient and scalable. It includes several advanced features, such as regularization, parallel processing, and handling missing values, which make it a popular choice for machine learning competitions and real-world applications.
+
+* LightGBM : It is a gradient boosting framework that uses tree-based learning algorithms. It is designed to be efficient and scalable, with a focus on speed and memory usage. LightGBM uses a histogram-based approach to split the data, which allows it to handle large datasets with high dimensionality.
+
+* CatBoost : It is a gradient boosting library that is designed to handle categorical features automatically. It uses a combination of decision trees and gradient boosting to make predictions, and includes several advanced features, such as handling missing values and reducing overfitting.
+
+* AdaBoost : It is an ensemble learning method that combines multiple weak classifiers to create a strong classifier. It works by iteratively training weak classifiers on the data, where each classifier focuses on the misclassified instances from the previous classifier. The final prediction is made by combining the predictions of all the classifiers, weighted by their performance.
+
+* Stacking : It is an ensemble learning method that combines multiple base models to create a meta-model. The base models are trained on the data, and their predictions are used as input features for the meta-model. The meta-model is then trained to make the final prediction based on the predictions of the base models.
+
+![alt text](image-83.png)
+
+* Voting Classifier : It is an ensemble learning method that combines multiple classifiers to make a final prediction. Each classifier makes a prediction, and the final prediction is made by majority voting (for classification) or averaging (for regression).
+
+* Bagging (Bootstrap Aggregating) : It is an ensemble learning method that combines multiple models using same algorithm but it is trained on different subsets of the data. Each model is trained on a random subset of the data (with replacement), and the final prediction is made by aggregating the predictions of all the models (majority voting for classification and averaging for regression).
+
+![alt text](image-84.png)
+
+* Boosting : It is an ensemble learning method that combines multiple weak models to create a strong model. Each model is trained sequentially, where each model tries to correct the errors of the previous model. The final prediction is made by combining the predictions of all the models, weighted by their performance.
+
+![alt text](image-85.png)
+
+Why ensemble methods work?
+Ensemble methods work because they combine the strengths of multiple models to create a more robust and accurate prediction. By aggregating the predictions of multiple models, ensemble methods can reduce the impact of individual model errors and improve overall performance. This is particularly effective when the individual models are diverse and make different types of errors.
+
+![alt text](image-86.png)
+![alt text](image-87.png)
+![alt text](image-88.png)
+
+For e.g in decision tree we mostly face the problem of low bias and high variance. By using ensemble methods like random forest and boosting we can reduce the variance and improve the accuracy of the model.
+
+Similarly in case of linear regression we mostly face the problem of high bias and low variance. By using ensemble methods like bagging we can reduce the bias and improve the accuracy of the model.
 **New Topics :**
 
 * Out of core learning : Out-of-core learning is a machine learning approach designed to handle datasets that are too large to fit into a computer’s main memory (RAM). Instead of loading the entire dataset at once, the algorithm processes the data in small chunks. E.g Mini batch processing, Stochastic gradient descent.
-  
+
+# Support vector machines (SVM)
+Support Vector Machines (SVM) is a supervised machine learning algorithm used for classification and regression tasks. Their primary goal is to find the optimal boundary, called a hyperplane, that separates data points into distinct classes. This hyperplane ensures the widest possible margin between the closest data points of each class, which are known as support vectors.
+
+SVM works by maximizing the margin between classes, which improves the model's ability to generalize to unseen data. For linearly separable data, SVM identifies a straight-line hyperplane. For non-linear data, it uses a kernel trick to map the data into a higher-dimensional space where it becomes linearly separable.
+
+Imagine you have two groups of points (e.g., red and blue) on a graph. SVM finds the line (or hyperplane) that best separates these groups while maximizing the distance (margin) from the nearest points of each group. If the data cannot be separated by a straight line, SVM applies a kernel function to transform the data into a higher-dimensional space where separation is possible.
+
+![alt text](image-89.png)
+
+![alt text](image-91.png)
+
+Which is better m1 or m2 ?
+
+M2 is better because it has a larger margin between the classes compared to M1. A larger margin indicates that the model is more robust and less likely to misclassify new data points.
+
+It is the best out of the box classifier because it works well on both linear and non-linear data. It is also effective in high-dimensional spaces and can handle large datasets.
+
+Maximial margin classifier : The optimal hyperplane is the one that maximizes the margin between the two classes. The margin is defined as the distance between the hyperplane and the nearest data points from each class, known as support vectors. By maximizing the margin, SVM aims to create a decision boundary that is robust and generalizes well to unseen data. It can only be applied to linearly separable data. It is also known as hard margin classifier.
+
+Know lets discuss about the mathematical formulation of SVM in detail and in depth in simple and intutive way.
+
+![alt text](image-92.png)
+
+Reason ?
+
+![alt text](image-93.png)
+
+The constriant is that the green data points should be on one side of the hyperplane and they should not cross ax+by+c = 1 line and the red data points should be on the other side of the hyperplane and they should not cross ax+by+c = -1 line.
+
+![alt text](image-94.png)
+
+![alt text](image-95.png)
+
+As you can see the formula but we are having 2 formula instead we can combine both the formula into one by multiplying yi to both the formula.
+![alt text](image-96.png)
+
+Updated Formula is :
+![alt text](image-97.png)
+
+This updated formula is applicable for both the classes. the mathematical intuition behind this formula is that for positive class points (yi = +1), the distance from the hyperplane should be at least 1, and for negative class points (yi = -1), the distance should be at most -1. By multiplying yi to both sides of the inequality, we can combine the two conditions into a single constraint that applies to all data points. Because the inequality sign flips when we multiply by a negative number.
+
+How to find the distance between two lines ?
+![alt text](image-98.png)
+
+But this same formula will not work for SVM because of differet equation of lines in SVM.
+![alt text](image-99.png)
+
+**Final**
+
+![alt text](image-100.png)
+
+1. Objective Function : The objective of SVM is to find the hyperplane that maximizes the margin between the two classes. This can be formulated as an constraint optimization problem where we want to minimize the norm of the weight vector (||w||) subject to the constraint that all data points are correctly classified.
+2. Constraints : The constraints ensure that all data points are correctly classified. For a data point (x_i, y_i), where x_i is the feature vector and y_i is the class label (+1 or -1), the constraint can be expressed as: y_i * (w · x_i + b) >= 1. This means that for positive class points (y_i = +1), the distance from the hyperplane should be at least 1, and for negative class points (y_i = -1), the distance should be at most -1.
+3. Lagrange Multipliers : To solve the optimization problem with constraints, we can use Lagrange multipliers. We introduce a Lagrange multiplier (α_i) for each constraint and formulate the Lagrangian function as: L(w, b, α) = 1/2 ||w||^2 - ∑(α_i * [y_i * (w · x_i + b) - 1]). The goal is to maximize the Lagrangian with respect to α and minimize it with respect to w and b.
+
+![alt text](image-101.png)
+
+## Prediction using SVM:
+Once the optimal hyperplane is found, we can use it to make predictions on new data points.
+
+![alt text](image-102.png)
+
+## Soft Margin SVM:
+In real-world scenarios, data is often not perfectly separable. To handle such cases, SVM introduces the concept of soft margin, which allows some misclassifications in the training data. This is achieved by introducing slack variables (ξ_i) that measure the degree of misclassification for each data point. The objective function is modified to include a penalty term for misclassifications, controlled by a regularization parameter (C). The updated objective function becomes: Minimize (1/2 ||w||^2 + C ∑(ξ_i)) subject to the constraints: y_i * (w · x_i + b) >= 1 - ξ_i and ξ_i >= 0 for all i. if 
+
+![alt text](image-103.png)
+![alt text](image-104.png)
+![alt text](image-105.png)
+![alt text](image-106.png)
+
+Types of SVM:
+
+![alt text](image-90.png)
+
+* Linear SVM : It is used when the data is linearly separable, meaning that a straight line (or hyperplane in higher dimensions) can be drawn to separate the classes. Linear SVM finds the optimal hyperplane that maximizes the margin between the two classes.
+* Non-linear SVM : It is used when the data is not linearly separable. Non-linear SVM uses kernel functions to transform the data into a higher-dimensional space where it becomes linearly separable. Common kernel functions include polynomial, radial basis function (RBF), and sigmoid.
+* Soft-margin SVM : It allows some misclassifications in the training data to create a more flexible decision boundary. Soft-margin SVM introduces slack variables to allow some data points to be on the wrong side of the hyperplane, while still maximizing the margin.
+* Hard-margin SVM : It does not allow any misclassifications in the training data. Hard-margin SVM finds the optimal hyperplane that separates the classes with the maximum margin, but it may not generalize well to unseen data if the training data is noisy or contains outliers.
+* Support Vector Regression (SVR) : It is an extension of SVM for regression tasks. SVR aims to find a function that approximates the relationship between the input features and the target variable, while allowing for some margin of error.
+* One-Class SVM : It is used for anomaly detection or novelty detection tasks. One-Class SVM learns a decision boundary around the normal data points and identifies any data points that fall outside this boundary as anomalies.
+* Nu-SVM : It is a variant of SVM that introduces a parameter (nu) to control the number of support vectors and the margin of the hyperplane. Nu-SVM allows for more flexibility in controlling the trade-off between maximizing the margin and minimizing the classification error.
+* Least Squares SVM (LS-SVM) : It is a variant of SVM that uses least squares loss function instead of hinge loss. LS-SVM solves a set of linear equations to find the optimal hyperplane, which can be computationally more efficient than traditional SVM.
+* Structured SVM : It is an extension of SVM for structured output prediction tasks, where the output variable is a complex structure (e.g., sequences, trees, graphs) rather than a single label. Structured SVM learns to predict the entire structure by considering the dependencies between the output variables.
+* Multi-class SVM : It is an extension of SVM for multi-class classification tasks, where there are more than two classes. Multi-class SVM can be implemented using techniques like one-vs-one or one-vs-all, where multiple binary SVM classifiers are trained to distinguish between different pairs or groups of classes.
+* Online SVM : It is a variant of SVM that can learn from streaming data or data that arrives in a sequential manner. Online SVM updates the model incrementally as new data points are received, allowing it to adapt to changing data distributions over time.
+* Least Absolute Deviations SVM (LAD-SVM) : It is a variant of SVM that uses least absolute deviations loss function instead of hinge loss. LAD-SVM is more robust to outliers in the training data, as it minimizes the absolute differences between the predicted and actual values.
+* Robust SVM : It is a variant of SVM that is designed to handle noisy or corrupted data. Robust SVM incorporates techniques like robust loss functions or outlier detection to improve the model's performance in the presence of noise or outliers.
+
+The key concepts of SVM include:
+
+* Hyperplane : It is a decision boundary that separates the data points of different classes. In a 2D space, it is a line, while in higher dimensions, it is a plane or a hyperplane.
+* Support Vectors : These are the data points that are closest to the hyperplane and have the most influence on its position. They are the critical elements of the training set that determine the optimal hyperplane.
+* Margin : It is the distance between the hyperplane and the nearest data points from each class (support vectors). SVM aims to maximize this margin to create a robust classifier.
+* Kernel Trick : It is a technique used to transform non-linearly separable data into a higher-dimensional space where it becomes linearly separable. Common kernel functions include linear, polynomial, radial basis function (RBF), and sigmoid.
+* Regularization : It is a technique used to prevent overfitting by adding a penalty term to the objective function. The regularization parameter (C) controls the trade-off between maximizing the margin and minimizing the classification error.
+* Slack Variables : These are used in soft-margin SVM to allow some misclassifications in the training data. They help to create a more flexible decision boundary that can better generalize to unseen data.
+* Dual Problem : SVM can be formulated as a dual optimization problem, which allows the use of kernel functions and makes the computation more efficient for high-dimensional data.
+* Optimization Algorithms : SVM training involves solving a convex optimization problem. Common algorithms used for this purpose include Sequential Minimal Optimization (SMO) and gradient descent methods.
+* Multi-class Classification : SVM is inherently a binary classifier, but it can be extended to handle multi-class classification problems using techniques like one-vs-one and one-vs-all.
+* Probabilistic Outputs : SVM can be adapted to provide probabilistic outputs using methods like Platt scaling or isotonic regression, which can be useful for certain applications.
+* Model Evaluation : SVM performance can be evaluated using metrics such as accuracy, precision, recall, F1-score, and ROC-AUC, depending on the specific classification task.
+* Hyperparameter Tuning : SVM has several hyperparameters, such as the regularization parameter (C) and kernel parameters (e.g., gamma for RBF kernel), that can be tuned using techniques like grid search or random search to optimize model performance.
+* Scalability : SVM can be computationally intensive for large datasets, so techniques like approximate SVM or using linear SVM implementations (e.g., LIBLINEAR) can help improve scalability.
+* Applications : SVM is widely used in various applications, including text classification, image recognition, bioinformatics, and fraud detection, due to its effectiveness in handling high-dimensional data and complex decision boundaries.
+* Interpretability : While SVMs are not as interpretable as some other models (e.g., decision trees), techniques like feature importance analysis and visualization of support vectors can provide insights into the model's decision-making process.
+* Model Selection : Choosing the appropriate kernel function and hyperparameters is crucial for SVM performance. Cross-validation techniques can help in selecting the best model configuration.
+* Handling Imbalanced Data : SVM can be sensitive to class imbalance. Techniques like adjusting class weights, oversampling the minority class, or undersampling the majority class can help improve performance on imbalanced datasets.
+* Computational Complexity : The training time of SVM can be high, especially for large datasets, as it involves solving a quadratic programming problem. However, once trained, SVMs can make predictions relatively quickly.
+* Robustness to Outliers : SVM can be sensitive to outliers, especially in the case of hard-margin SVM. Using soft-margin SVM with appropriate regularization can help mitigate the impact of outliers on the decision boundary.
+* Model Persistence : SVM models can be saved and loaded using libraries like joblib or pickle in Python, allowing for easy deployment and reuse of trained models.
+* Integration with Other Techniques : SVM can be combined with other machine learning techniques, such as ensemble methods or feature selection, to enhance model performance and interpretability.
+* Software Implementations : SVM is implemented in various machine learning libraries, such as scikit-learn, LIBSVM, and TensorFlow, making it accessible for practitioners and researchers.
+* Extensions : There are several extensions of SVM, such as Support Vector Regression (SVR) for regression tasks and One-Class SVM for anomaly detection.
+* Limitations : SVM may not perform well on very large datasets or when the number of features is much larger than the number of samples. Additionally, SVMs can be less interpretable compared to simpler models like linear regression or decision trees.
+* Hyperplane Optimization : The optimal hyperplane is determined by solving a convex optimization problem that maximizes the margin while minimizing classification errors. This is typically done using techniques like quadratic programming.
+* Soft Margin vs. Hard Margin : SVM can be implemented with either a hard margin (no misclassifications allowed) or a soft margin (some misclassifications allowed). Soft margin SVM is more flexible and can handle noisy data better.
+* Feature Scaling : SVM is sensitive to the scale of the input features. Therefore, it is important to standardize or normalize the features before training the model to ensure that all features contribute equally to the distance calculations.
+* Model Complexity : The choice of kernel and hyperparameters can significantly affect the complexity of the SVM model. A more complex model may fit the training data better but can also lead to overfitting.
+* Cross-Validation : To assess the performance of an SVM model and tune hyperparameters, cross-validation techniques such as k-fold cross-validation can be employed. This helps in obtaining a more reliable estimate of the model's generalization performance.
+* Computational Efficiency : For large datasets, training SVMs can be computationally expensive. Techniques like using linear SVMs or approximate methods can help improve efficiency without significantly compromising performance.
+* Applications in Various Domains : SVM has been successfully applied in various domains, including text classification (e.g., spam detection), image recognition (e.g., face detection), bioinformatics (e.g., protein classification), and finance (e.g., credit risk assessment).
+* Interpretation of Support Vectors : The support vectors are the critical data points that define the decision boundary. Analyzing these points can provide insights into the model's behavior and the characteristics of the data.
+* Multi-class SVM Strategies : Since SVM is inherently a binary classifier, strategies like one-vs-one (OvO) and one-vs-all (OvA) are used to extend SVM for multi-class classification problems. OvO involves training a separate SVM for each pair of classes, while OvA involves training an SVM for each class against all other classes.
+* Probability Estimates : Although SVMs do not inherently provide probability estimates, techniques like Platt scaling or isotonic regression can be used to convert SVM outputs into calibrated probabilities, which can be useful for certain applications.
+* Feature Selection : SVM can be used for feature selection by analyzing the weights assigned to features in the decision function. Features with higher weights are considered more important for classification.
+* Handling Noisy Data : SVM can be sensitive to noisy data points. Using techniques like soft-margin SVM and appropriate regularization can help improve robustness to noise.
+* Model Deployment : SVM models can be deployed in production environments using various frameworks and libraries, allowing for real-time predictions and integration with other systems.
+* Continuous Learning : SVM can be adapted for online learning scenarios, where the model is updated incrementally as new data becomes available, allowing it to adapt to changing data distributions over time.
+* Research and Advancements : Ongoing research in the field of SVM continues to explore new kernel functions, optimization techniques, and applications, contributing to the evolution of this powerful machine learning algorithm.
+
 ## There are mainly 2 types of ML Models
 
 **Parametric Models :** In parametric models, the model structure is defined by a fixed number of parameters. Once these parameters are learned from the training data, the model can make predictions without needing to refer back to the entire dataset. Examples of parametric models include linear regression, logistic regression, and neural networks.
