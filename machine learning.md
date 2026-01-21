@@ -916,6 +916,8 @@ But this same formula will not work for SVM because of differet equation of line
 
 ![alt text](image-100.png)
 
+![alt text](image-107.png)
+
 1. Objective Function : The objective of SVM is to find the hyperplane that maximizes the margin between the two classes. This can be formulated as an constraint optimization problem where we want to minimize the norm of the weight vector (||w||) subject to the constraint that all data points are correctly classified.
 2. Constraints : The constraints ensure that all data points are correctly classified. For a data point (x_i, y_i), where x_i is the feature vector and y_i is the class label (+1 or -1), the constraint can be expressed as: y_i * (w · x_i + b) >= 1. This means that for positive class points (y_i = +1), the distance from the hyperplane should be at least 1, and for negative class points (y_i = -1), the distance should be at most -1.
 3. Lagrange Multipliers : To solve the optimization problem with constraints, we can use Lagrange multipliers. We introduce a Lagrange multiplier (α_i) for each constraint and formulate the Lagrangian function as: L(w, b, α) = 1/2 ||w||^2 - ∑(α_i * [y_i * (w · x_i + b) - 1]). The goal is to maximize the Lagrangian with respect to α and minimize it with respect to w and b.
@@ -935,6 +937,9 @@ In real-world scenarios, data is often not perfectly separable. To handle such c
 ![alt text](image-105.png)
 ![alt text](image-106.png)
 
+updated formula is :
+![alt text](image-108.png)
+![alt text](image-109.png)
 Types of SVM:
 
 ![alt text](image-90.png)
